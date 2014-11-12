@@ -5,6 +5,6 @@
   <scmGitBranch></scmGitBranch>
   <noUserCommitMessage>false</noUserCommitMessage>
   <displayStatus>true</displayStatus>
-  <commitMessagePattern>checking current branch</commitMessagePattern>
+  <commitMessagePattern>[message]</commitMessagePattern>
   <manualSynchronizationIncludes/>
 </hudson.plugins.scm__sync__configuration.ScmSyncConfigurationPlugin>
