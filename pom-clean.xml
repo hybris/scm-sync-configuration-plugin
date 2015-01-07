@@ -1,0 +1,109 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jenkins-ci.plugins</groupId>
+    <artifactId>plugin</artifactId>
+    <!--<version>1.534</version>-->
+    <version>1.593</version>
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+
+  <artifactId>scm-sync-configuration</artifactId>
+  <name>SCM Sync Configuration Plugin</name>
+  <version>0.0.8.1hybris</version>
+  <packaging>hpi</packaging>
+  <url>http://wiki.jenkins-ci.org/display/JENKINS/SCM+Sync+configuration+plugin</url>
+  <description>SCM Sync Configuration Jenkins plugin is aimed at 2 main features : First, keep sync'ed your config.xml (and other ressources) jenkins files with a SCM repository (backup), Secondly, track changes (and author) made on every file with commit messages.</description>
+
+  <developers>
+    <developer>
+      <id>fcamblor</id>
+      <name>Frederic Camblor</name>
+      <email>fcamblor+jenkinswiki@gmail.com</email>
+    </developer>
+    <developer>
+      <id>bpaquet</id>
+      <name>Bertrand Paquet</name>
+      <email>bertrand.paquet@gmail.com</email>
+    </developer>
+  </developers>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <powermock.version>1.6.0</powermock.version>
+  </properties>
+    
+  <!-- get every artifact through maven.glassfish.org, which proxies all the artifacts that we need -->
+  <repositories>
+    <repository>
+        <id>repo.jenkins-ci.org</id>
+        <url>http://repo.jenkins-ci.org/public/</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+        <id>repo.jenkins-ci.org</id>
+        <url>http://repo.jenkins-ci.org/public/</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+	<pluginManagement>
+
+	</pluginManagement>
+	<plugins>
+
+	</plugins>
+  </build>
+
+  <dependencyManagement>
+      <dependencies>
+
+      </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+      <dependency>
+          <groupId>org.powermock</groupId>
+          <artifactId>powermock-module-junit4</artifactId>
+          <version>${powermock.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.powermock</groupId>
+          <artifactId>powermock-api-mockito</artifactId>
+          <version>${powermock.version}</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-api</artifactId>
+          <version>1.9.2</version>
+          <scope>test</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.apache.maven.scm</groupId>
+          <artifactId>maven-scm-manager-plexus</artifactId>
+          <version>1.9.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-container-default</artifactId>
+          <version>1.5.5</version>
+      </dependency>
+      <dependency>
+          <groupId>com.google.guava</groupId>
+          <artifactId>guava</artifactId>
+          <version>14.0</version>
+      </dependency>
+  </dependencies>
+  
+  <scm>
+    <connection>scm:git:git://github.com/jenkinsci/scm-sync-configuration-plugin.git</connection>
+    <developerConnection>scm:git:git@github.com:jenkinsci/scm-sync-configuration-plugin.git</developerConnection>
+    <url>https://github.com/jenkinsci/scm-sync-configuration-plugin</url>
+    <tag>HEAD</tag>
+  </scm>
+</project>

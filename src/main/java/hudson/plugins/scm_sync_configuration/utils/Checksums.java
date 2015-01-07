@@ -1,5 +1,11 @@
 package hudson.plugins.scm_sync_configuration.utils;
 
+//import com.google.common.hash.HashCode;
+//import com.google.common.hash.HashFunction;
+//import com.google.common.hash.Hashing;
+//import com.google.common.hash.HashingInputStream;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import com.google.common.io.ByteStreams;
 import com.google.common.io.Files;
 
@@ -18,10 +24,15 @@ public class Checksums {
             return content == null || content.length == 0;
         }
 
-        Checksum checksum = createChecksum();
-        long fileChecksum = Files.getChecksum(file, checksum);
-        long contentChecksum = ByteStreams.getChecksum(ByteStreams.newInputStreamSupplier(content), checksum);
-        return fileChecksum == contentChecksum;
+//        Checksum checksum = createChecksum();
+//        long fileChecksum = Files.getChecksum(file, checksum);
+//        long contentChecksum = ByteStreams.getChecksum(ByteStreams.newInputStreamSupplier(content), checksum);
+//        return fileChecksum == contentChecksum;
+
+        HashCode crc32 = Files.hash(file, Hashing.crc32());
+        int fileHash = crc32.asInt();
+        int contentHash = Hashing.crc32().hashBytes(content).asInt();
+        return fileHash == contentHash;
     }
 
     private static Checksum createChecksum(){

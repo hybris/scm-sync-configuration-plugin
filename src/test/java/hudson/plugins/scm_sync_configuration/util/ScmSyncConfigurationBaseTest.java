@@ -16,6 +16,7 @@ import hudson.plugins.scm_sync_configuration.xstream.migration.DefaultSSCPOJO;
 import hudson.plugins.scm_sync_configuration.xstream.migration.ScmSyncConfigurationPOJO;
 import hudson.plugins.test.utils.DirectoryUtils;
 import hudson.plugins.test.utils.scms.ScmUnderTest;
+import jenkins.model.Jenkins;
 import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.util.FileUtils;
@@ -24,6 +25,8 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestName;
 import org.junit.runner.RunWith;
+import org.jvnet.hudson.test.JenkinsRule;
+import org.jvnet.hudson.test.recipes.LocalData;
 import org.mockito.Mockito;
 import org.objenesis.ObjenesisStd;
 import org.powermock.api.mockito.PowerMockito;
@@ -45,11 +48,13 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PowerMockIgnore({ "org.tmatesoft.svn.*" })
+@PowerMockIgnore({ "org.tmatesoft.svn.*" ,"javax.crypto.*" })
 @PrepareForTest({Hudson.class, SCM.class, ScmSyncSubversionSCM.class, PluginWrapper.class})
 public abstract class ScmSyncConfigurationBaseTest {
 	
 	@Rule protected TestName testName = new TestName();
+    @Rule public JenkinsRule jenkinsRule = new JenkinsRule();
+
 	private File currentTestDirectory = null;
 	private File curentLocalRepository = null;
 	private File currentHudsonRootDirectory = null;
@@ -57,7 +62,8 @@ public abstract class ScmSyncConfigurationBaseTest {
 	protected ScmContext scmContext = null;
 	
 	private ScmUnderTest scmUnderTest;
-	
+
+
 	protected ScmSyncConfigurationBaseTest(ScmUnderTest scmUnderTest) {
 		this.scmUnderTest = scmUnderTest;
 		this.scmContext = null;
@@ -97,15 +103,21 @@ public abstract class ScmSyncConfigurationBaseTest {
 		curentLocalRepository = new File(currentTestDirectory.getAbsolutePath()+"/localRepo/");
 	    if(!(curentLocalRepository.mkdir())) { throw new IOException("Could not create local repo directory: " + curentLocalRepository.getAbsolutePath()); }
 	    scmUnderTest.initRepo(curentLocalRepository);
-	    
-	    // Mocking user
+//        System.out.println(">>>>>>>>JenkinsRootDir:" +Jenkins.getInstance().getRootDir());
+//        System.out.println(">>>>>>>>HudsonBaseTemplate:" + getHudsonRootBaseTemplate() + ">>>>>>>>>>>>>>>>>currentHudson"+currentHudsonRootDirectory + ">>>>>>>>>>currentTestDirectory" + currentTestDirectory);
+
+        // Mocking user
 	    User mockedUser = Mockito.mock(User.class);
 	    when(mockedUser.getId()).thenReturn("fcamblor");
 	    
 		// Mocking Hudson singleton instance ...
 	    // Warning : this line will only work on Objenesis supported VMs :
 	    // http://code.google.com/p/objenesis/wiki/ListOfCurrentlySupportedVMs
-	    Hudson hudsonMockedInstance = spy((Hudson) new ObjenesisStd().getInstantiatorOf(Hudson.class).newInstance());
+
+
+        //Hudson hudsonMockedInstance = spy((Hudson) new ObjenesisStd().getInstantiatorOf(Hudson.class).newInstance());
+        Hudson hudsonMockedInstance = spy((Hudson)jenkinsRule.getInstance());
+
 		PowerMockito.doReturn(currentHudsonRootDirectory).when(hudsonMockedInstance).getRootDir();
 		PowerMockito.doReturn(mockedUser).when(hudsonMockedInstance).getMe();
 		PowerMockito.doReturn(scmSyncConfigPluginInstance).when(hudsonMockedInstance).getPlugin(ScmSyncConfigurationPlugin.class);
@@ -127,7 +139,8 @@ public abstract class ScmSyncConfigurationBaseTest {
 	}
 	
 	protected static File createTmpDirectory(String directoryPrefix) throws IOException {
-	    final File temp = File.createTempFile(directoryPrefix, Long.toString(System.nanoTime()));
+        String jenkinsRootDirPrefix = Jenkins.getInstance().getRootDir().toString()+"//";
+	    final File temp = File.createTempFile(jenkinsRootDirPrefix + directoryPrefix, Long.toString(System.nanoTime()));
 	    if(!(temp.delete())) { throw new IOException("Could not delete temp file: " + temp.getAbsolutePath()); }
 	    if(!(temp.mkdir())) { throw new IOException("Could not create temp directory: " + temp.getAbsolutePath()); }
 	    return (temp);

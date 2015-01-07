@@ -68,7 +68,6 @@
                 <configuration>
                     <!-- Needed to avoid some permgen space errors during test execution ... -->
                     <argLine>-XX:MaxPermSize=128m</argLine>
-                    <!--<debugForkedProcess>true</debugForkedProcess>-->
                 </configuration>
             </plugin>
 		</plugins>
